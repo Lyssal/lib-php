@@ -1,0 +1,20 @@
+{
+	"name" : "lyssal/lib-php",
+	"description" : "Librairie PHP Lyssal",
+	"keywords" : [
+		"php",
+		"php-lib"
+	],
+	"type" : "library",
+	"authors" : [{
+			"name" : "Rémi Leclerc",
+			"homepage" : "http://www.lyssal.com/"
+		}
+	],
+	"autoload" : {
+		"psr-0" : {
+			"Lyssal\\" : "src/"
+		}
+	},
+	"target-dir" : "Lyssal/Component/Lyssal"
+}
