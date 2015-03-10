@@ -118,9 +118,9 @@ class Image extends Fichier
         
         if ($conserveProportions)
         {
-            if ($nouvelleLargeur == null)
+            if (null === $nouvelleLargeur)
                 $nouvelleLargeur = intval($this->largeur / $this->hauteur * $nouvelleHauteur);
-            elseif ($nouvelleHauteur == null)
+            elseif (null === $nouvelleHauteur)
                 $nouvelleHauteur = intval($this->hauteur / $this->largeur * $nouvelleLargeur);
         }
         else

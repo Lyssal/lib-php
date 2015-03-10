@@ -1,9 +1,10 @@
 {
 	"name" : "lyssal/lib-php",
-	"description" : "Librairie PHP Lyssal",
+	"description" : "Librairie PHP générale de Lyssal",
+	"license" : "proprietary",
 	"keywords" : [
 		"php",
-		"php-lib"
+		"lyssal"
 	],
 	"type" : "library",
 	"authors" : [{
@@ -11,6 +12,9 @@
 			"homepage" : "http://www.lyssal.com/"
 		}
 	],
+	"require": {
+        "php": ">=5.3.0"
+    }
 	"autoload" : {
 		"psr-0" : {
 			"Lyssal\\" : "src/"

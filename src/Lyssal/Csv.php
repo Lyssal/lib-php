@@ -26,7 +26,7 @@ class Csv
     /**
      * @var array<string> En-têtes du CSV
      */
-    private $header = array();
+    private $enTetes = array();
     /**
      * @var array<array<string>> En-têtes du CSV
      */
@@ -75,12 +75,12 @@ class Csv
     /**
      * Spécifie les en-têtes du CSV.
      * 
-     * @param array<string> $header En-têtes du CSV
+     * @param array<string> $enTetes En-têtes du CSV
      * @return \Lyssal\Csv Instance
      */
-    public function setHeader(array $header)
+    public function setEnTetes(array $enTetes)
     {
-        $this->header = $header;
+        $this->enTetes = $enTetes;
     }
     
     /**
