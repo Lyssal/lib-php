@@ -34,3 +34,12 @@ Permet de traiter des fichiers.
 Permet de traiter des images (étend Fichier).
 
 * `redimensionne($nouvelleLargeur, $nouvelleHauteur, $conserveProportions)` : Redimensionne l'image
+
+
+## Couleur
+
+Permet de manipuler des couleurs.
+
+* `lighten($pourcentage)` : Éclaircit une couleur
+* `darken($pourcentage)` : Obscurcit une couleur
+
