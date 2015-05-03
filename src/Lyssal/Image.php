@@ -14,12 +14,12 @@ class Image extends Fichier
     private $resourceGd;
     
     /**
-     * @var integer Largeur de l'image
+     * @var integer Largeur de l'image (en pixels)
      */
     private $largeur;
     
     /**
-     * @var integer Hauteur de l'image
+     * @var integer Hauteur de l'image (en pixels)
      */
     private $hauteur;
     
@@ -38,7 +38,26 @@ class Image extends Fichier
         parent::__construct($imagePath);
         
         $this->initProprietes();
-		$this->initResourceGd();
+        $this->initResourceGd();
+    }
+    
+    /**
+     * Retourne la largeur de l'image (en pixels).
+     * 
+     * @return integer Largeur
+     */
+    public function getLargeur()
+    {
+        return $this->largeur;
+    }
+    /**
+     * Retourne la hauteur de l'image (en pixels).
+     *
+     * @return integer Hauteur
+     */
+    public function getHauteur()
+    {
+        return $this->hauteur;
     }
     
     /**
@@ -46,7 +65,7 @@ class Image extends Fichier
      * 
      * @return void
      */
-    private function initResourceGd()
+    protected function initResourceGd()
     {
         switch ($this->type)
         {
@@ -69,7 +88,7 @@ class Image extends Fichier
      * 
      * @return void
      */
-    private function initProprietes()
+    protected function initProprietes()
     {
         $dimensions = getimagesize($this->getChemin());
 		$this->largeur = $dimensions[0];
