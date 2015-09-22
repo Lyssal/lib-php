@@ -43,3 +43,12 @@ Permet de manipuler des couleurs.
 * `lighten($pourcentage)` : Éclaircit une couleur
 * `darken($pourcentage)` : Obscurcit une couleur
 
+
+## Cryptage
+
+Permet de crypter / décrypter du texte.
+
+### Méthodes statiques
+
+* `base64UrlEncode($texte)` : Encode en 64 bits pour une URL
+* `base64UrlDecode($texte)` : Decode en 64 bits pour une URL
