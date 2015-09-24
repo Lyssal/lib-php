@@ -15,7 +15,13 @@ Permet de traiter des chaînes de caractères.
 
 Permet de traiter des fichiers CSV.
 
-* `importe()` : Lit le fichier CSV
+* `setSeparateur($separateur)` : Spécifie le séparateur de colonne
+* `setEncadrementTexte($encadrementTexte)` : Spécifie le caractère d'encadrement de texte
+* `setEnTetes(array $enTetes)` : Spécifie les en-têtes du CSV
+* `getLignes()` : Retourne les lignes du CSV
+* `addLigne(array $ligne)` : Ajoute une ligne au CSV
+* `changeCharset($charsetSource = null, $charsetTarget = null)` : Change le jeu de caractères
+* `importe($aHeader = false)` : Lit le fichier CSV
 * `exporte()` : Télécharge le fichier CSV généré
 
 

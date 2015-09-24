@@ -27,10 +27,22 @@ class Csv
      * @var array<string> En-têtes du CSV
      */
     private $enTetes = array();
+
     /**
      * @var array<array<string>> En-têtes du CSV
      */
     private $lignes = array();
+    
+    /**
+     * @var string Jeu de caractères de la source
+     */
+    private $charsetSource = null;
+    
+    /**
+     * @var string Jeu de caractères de la cible
+     */
+    private $charsetTarget = null;
+
 
     /**
      * Constructeur de Csv.
@@ -45,7 +57,8 @@ class Csv
         $this->separateurChamp = $separateurChamp;
         $this->encadrementTexte = $encadrementTexte;
     }
-    
+
+
     /**
      * Spécifie le séparateur de colonne.
      * 
@@ -80,7 +93,7 @@ class Csv
      */
     public function setEnTetes(array $enTetes)
     {
-        $this->enTetes = $enTetes;
+        $this->enTetes = $this->processLigne($enTetes);
     }
     
     /**
@@ -100,8 +113,55 @@ class Csv
      */
     public function addLigne(array $ligne)
     {
-        $this->lignes[] = $ligne;
+        $this->lignes[] = $this->processLigne($ligne);
     }
+    
+    /**
+     * Change le jeu de caractères.
+     * 
+     * @param string $charsetSource Encodage source
+     * @param string $charsetTarget Encodage cible
+     * @return void
+     */
+    public function changeCharset($charsetSource = null, $charsetTarget = null)
+    {
+        if ((null === $charsetSource && null !== $charsetTarget) || (null !== $charsetSource && null === $charsetTarget))
+            throw new \Exception('Les encodages source et cible doivent être définis tous les deux.');
+
+        $this->charsetSource = $charsetSource;
+        $this->charsetTarget = $charsetTarget;
+    }
+    
+    /**
+     * Effectue des opérations sur la ligne pour la rendre conforme.
+     * 
+     * @param array<string> Ligne du CSV
+     * @return array<string> Ligne conforme
+     */
+    protected function processLigne(array $ligne)
+    {
+        return $this->iconvLigne($ligne);
+    }
+    
+    /**
+     * Convertit la ligne du CSV avec le bon charset si défini.
+     * 
+     * @param array<string> Ligne du CSV
+     * @return array<string> Ligne avec le bon encodage
+     */
+    protected function iconvLigne(array $ligne)
+    {
+        if (null !== $this->charsetSource && null !== $this->charsetTarget)
+        {
+            foreach ($ligne as $i => $celluleValeur)
+            {
+                $ligne[$i] = iconv($this->charsetSource, $this->charsetTarget, $celluleValeur);
+            }
+        }
+        
+        return $ligne;
+    }
+    
     
     /**
      * Importe un fichier CSV.
@@ -116,11 +176,11 @@ class Csv
         {
             if ($aHeader)
             {
-                if ($ligne = fgetcsv($csv, 1100, $this->separateurChamp, $this->encadrementTexte))
-                    $this->enTetes = $ligne;
+                if ($ligne = fgetcsv($csv, null, $this->separateurChamp, $this->encadrementTexte))
+                    $this->setEnTetes($ligne);
             }
             
-            while (($ligne = fgetcsv($csv, 1100, $this->separateurChamp, $this->encadrementTexte)) !== false)
+            while (($ligne = fgetcsv($csv, null, $this->separateurChamp, $this->encadrementTexte)) !== false)
                 $this->addLigne($ligne);
             
             fclose($csv);
@@ -142,15 +202,15 @@ class Csv
         if (count($this->enTetes) > 0)
         {
             if (null === $this->encadrementTexte)
-                fputs($out, implode($this->enTetes, $this->separateurChamp)."\n");
-            else fputcsv($out, $this->enTetes, $this->separateurChamp, $this->encadrementTexte);
+                fputs($out, implode($this->processLigne($this->enTetes), $this->separateurChamp)."\n");
+            else fputcsv($out, $this->processLigne($this->enTetes), $this->separateurChamp, $this->encadrementTexte);
         }
         
         foreach ($this->lignes as $ligne)
         {
             if (null === $this->encadrementTexte)
-                fputs($out, implode($ligne, $this->separateurChamp)."\n");
-            else fputcsv($out, $ligne, $this->separateurChamp, $this->encadrementTexte);
+                fputs($out, implode($this->processLigne($ligne), $this->separateurChamp)."\n");
+            else fputcsv($out, $this->processLigne($ligne), $this->separateurChamp, $this->encadrementTexte);
         }
         
         fclose($out);
