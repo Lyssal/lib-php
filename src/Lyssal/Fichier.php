@@ -143,6 +143,23 @@ class Fichier
         
         return $this;
     }
+
+    /**
+     * Normalise les fins de ligne d'un fichier.
+     * 
+     * @return void
+     */
+    public function normalizeEndLines()
+    {
+        $contenu = file_get_contents($this->splFileInfo->getRealPath());
+        
+        if (false === $contenu)
+            throw new \Exception('Fichier non lisible.');
+        
+        $contenu = str_replace(array("\r", "\n"), "\r\n", $contenu);
+        
+        file_put_contents($this->splFileInfo->getRealPath(), $contenu);
+    }
     
     /**
     * Retourne le chemin du fichier s'il est libre, sinon un autre chemin libre

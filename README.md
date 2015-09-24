@@ -33,6 +33,7 @@ Permet de traiter des fichiers.
 * `copy($chemin, $remplaceSiExistant)` : Copie le fichier
 * `setNomMinifie($nouveauNom, $separateur, $toutEnMinuscule, $longueurMaximale, $remplaceSiExistant)` : Minifie le nom du fichier
 * `getCheminLibre($fichier, $separateur)` : Retourne un chemin libre (aucun fichier existant) pour ce fichier
+* `normalizeEndLines()` : Normalise les fins de ligne d'un fichier
 
 
 ## Image
