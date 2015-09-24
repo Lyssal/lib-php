@@ -94,6 +94,18 @@ class Csv
     public function setEnTetes(array $enTetes)
     {
         $this->enTetes = $this->processLigne($enTetes);
+        
+        return $this;
+    }
+    
+    /**
+     * Retourne les en-têtes du CSV.
+     * 
+     * @return array<string> En-têtes
+     */
+    public function getEnTetes()
+    {
+        return $this->enTetes;
     }
     
     /**
@@ -179,7 +191,7 @@ class Csv
                 if ($ligne = fgetcsv($csv, null, $this->separateurChamp, $this->encadrementTexte))
                     $this->setEnTetes($ligne);
             }
-            
+
             while (($ligne = fgetcsv($csv, null, $this->separateurChamp, $this->encadrementTexte)) !== false)
                 $this->addLigne($ligne);
             
