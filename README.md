@@ -9,8 +9,8 @@ Permet de traiter des chaînes de caractères.
 
 * `supprimeAccents()` : Supprime les accents de la chaîne de caractères
 * `minifie($separateur, $toutEnMinuscule)` : Simplifie la chaîne de caractères (pour une URL par exemple)
-* `hasLettre() : Retourne si la chaîne contient au moins une lettre
-* `hasChiffre() : Retourne si la chaîne contient au moins un chiffre
+* `hasLettre()` : Retourne si la chaîne contient au moins une lettre
+* `hasChiffre()` : Retourne si la chaîne contient au moins un chiffre
 * `br2nl()` : Remplace les <br> en \n
 * `encodeHtml()` : Encode la chaîne en HTML
 
