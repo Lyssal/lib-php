@@ -90,4 +90,48 @@ class Chaine
         
         return $this;
     }
+
+    /**
+     * Retourne si la chaîne contient au moins une lettre.
+     *
+     * @return boolean VRAI ssi la chaîne contient une lettre
+     */
+    public function hasLettre()
+    {
+        return preg_match('/[a-zA-Z]/', $this->texte);
+    }
+    
+    /**
+     * Retourne si la chaîne contient au moins un chiffre.
+     *
+     * @return boolean VRAI ssi la chaîne contient une chiffre
+     */
+    public function hasChiffre()
+    {
+        return preg_match('/\d/', $this->texte);
+    }
+    
+    /**
+     * Remplace les <br> en \n.
+     *
+     * @return \Lyssal\Chaine La chaîne de caractères
+     */
+    public function br2nl()
+    {
+        $this->texte = preg_replace('/\<br(\s*)?\/?\>/i', PHP_EOL, $this->texte);
+    
+        return $this;
+    }
+    
+    /**
+     * Encode la chaîne en HTML.
+     *
+     * @return \Lyssal\Chaine La chaîne de caractères HTML.
+     */
+    public function encodeHtml()
+    {
+        $this->texte = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), htmlentities($this->texte, ENT_NOQUOTES, 'UTF-8'));
+    
+        return $this;
+    }
 }
