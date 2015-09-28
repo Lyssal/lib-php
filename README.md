@@ -66,3 +66,14 @@ Permet de crypter / décrypter du texte.
 
 * `base64UrlEncode($texte)` : Encode en 64 bits pour une URL
 * `base64UrlDecode($texte)` : Decode en 64 bits pour une URL
+
+
+## Systeme
+
+Classe permettant des traitements sur le système.
+
+### Méthodes statiques
+
+* `setMemoryLimit($memoryLimit)` : Détermine la mémoire limite (en octet par défaut) qu'un script est autoriser à allouer
+* `setTimeLimitIllimite()` : Fixe le temps d'exécution d'un script à illimité
+* `redirect($url)` : Redirige l'internaute
