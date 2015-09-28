@@ -74,6 +74,31 @@ class Fichier
     }
     
     /**
+     * Retourne le contenu du fichier.
+     * 
+     * @return string|NULL Contenu ou NULL si non lisible
+     */
+    public function getContent()
+    {
+        $contenu = file_get_contents($this->splFileInfo->getRealPath());
+        if (false === $contenu)
+            $contenu = null;
+        
+        return $contenu;
+    }
+
+    /**
+     * Spécifie le contenu du fichier.
+     *
+     * @param string $contenu Nouveau contenu
+     * @return void
+     */
+    public function setContent($contenu)
+    {
+        file_put_contents($this->splFileInfo->getRealPath(), $contenu);
+    }
+    
+    /**
      * Déplace le fichier.
      *
      * @param string $nouveauChemin Nouveau chemin du fichier
@@ -151,14 +176,14 @@ class Fichier
      */
     public function normalizeEndLines()
     {
-        $contenu = file_get_contents($this->splFileInfo->getRealPath());
+        $contenu = $this->getContent();
         
-        if (false === $contenu)
+        if (null === $contenu)
             throw new \Exception('Fichier non lisible.');
         
         $contenu = str_replace(array("\r", "\n"), "\r\n", $contenu);
         
-        file_put_contents($this->splFileInfo->getRealPath(), $contenu);
+        $this->setContent($contenu);
     }
     
     /**
@@ -184,5 +209,19 @@ class Fichier
             return self::getCheminLibre(substr($fichier, 0, strlen($fichier) - strlen($fichierExtension) - 1).$separateur.'1'.'.'.$fichierExtension, $separateur);
         }
         return $fichier;
+    }
+
+    /**
+     * Retourne l'encodage du fichier.
+     * 
+     * @return string|NULL Encodage du fichier ou NULL si non trouvé
+     */
+    public function getEncodage()
+    {
+        $encodage = mb_detect_encoding(file_get_contents($this->splFileInfo->getRealPath(), null, null, 1), mb_list_encodings());
+        if (false === $encodage)
+            $encodage = null;
+
+        return $encodage;
     }
 }

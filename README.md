@@ -33,11 +33,14 @@ Permet de traiter des fichiers CSV.
 
 Permet de traiter des fichiers.
 
+* `getContent()` : Retourne le contenu du fichier
+* `setContent($contenu)` : Spécifie le contenu du fichier
 * `move($nouveauChemin, $remplaceSiExistant)` : Déplace le fichier
 * `copy($chemin, $remplaceSiExistant)` : Copie le fichier
 * `setNomMinifie($nouveauNom, $separateur, $toutEnMinuscule, $longueurMaximale, $remplaceSiExistant)` : Minifie le nom du fichier
 * `getCheminLibre($fichier, $separateur)` : Retourne un chemin libre (aucun fichier existant) pour ce fichier
 * `normalizeEndLines()` : Normalise les fins de ligne d'un fichier
+* `getEncodage()` : Retourne l'encodage du fichier
 
 
 ## Image
