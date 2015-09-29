@@ -7,6 +7,7 @@
 
 Permet de traiter des chaînes de caractères.
 
+* `replace()` : Remplace dans le texte
 * `supprimeAccents()` : Supprime les accents de la chaîne de caractères
 * `minifie($separateur, $toutEnMinuscule)` : Simplifie la chaîne de caractères (pour une URL par exemple)
 * `hasLettre()` : Retourne si la chaîne contient au moins une lettre

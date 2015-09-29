@@ -11,7 +11,7 @@ class Chaine
     /**
      * @var string Texte manipulé
      */
-    private $texte;
+    protected $texte;
 
     /**
      * Constructeur de Chaine.
@@ -31,6 +31,18 @@ class Chaine
     public function getTexte()
     {
         return $this->texte;
+    }
+    
+    /**
+     * Remplace dans le texte.
+     * Cette méthode est semblable à str_replace().
+     * 
+     * @param string|array $recherche    Contenu à rechercher
+     * @param string|array $remplacement Contenu de remplacement
+     */
+    public function replace($recherche, $remplacement)
+    {
+        $this->texte = str_replace($recherche, $remplacement, $this->texte);
     }
     
     /**
