@@ -39,4 +39,45 @@ class Systeme
         header('Location: '.$url);
         exit();
     }
+
+    /**
+     * Retourne la taille maximale en octet que peut avoir un fichier chargé par l'utilisateur.
+     * 
+     * @return integer Taille max des uploads
+     */
+    public static function getFileUploadMaxSize()  
+    {  
+        return min(self::getPhpSizeInBytes(ini_get('post_max_size')), self::getPhpSizeInBytes(ini_get('upload_max_filesize')));  
+    }
+
+    /**
+     * Retourne le nombre d'octets d'une taille en PHP (par exemple 2G ou 10M).
+     * 
+     * @return integer Taille max des uploads
+     */
+    public static function getPhpSizeInBytes($phpSize)
+    {  
+        if ( is_numeric($phpSize) ) {
+            return $phpSize;
+        }
+
+        $sizeSuffixe = strtoupper(substr($phpSize, -1));
+        $sizeValue = intval(substr($phpSize, 0, -1));
+
+        switch (strtoupper($sizeSuffixe)) {
+            case 'P':
+                $sizeValue *= 1024;
+            case 'T':
+                $sizeValue *= 1024;
+            case 'G':
+                $sizeValue *= 1024;
+            case 'M':
+                $sizeValue *= 1024;
+            case 'K':
+                $sizeValue *= 1024;
+                break;
+        }
+
+        return $sizeValue;
+    }  
 }
