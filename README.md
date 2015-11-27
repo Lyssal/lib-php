@@ -34,6 +34,12 @@ Permet de traiter des fichiers CSV.
 
 Permet de traiter des fichiers.
 
+* `getPathname()` : Retourne le chemin du fichier
+* `getFilename()` : Retourne le nom du fichier
+* `getFilenameWithoutExtension()` : Retourne le nom du fichier sans son extension
+* `getExtension()` : Retourne l'extension du fichier
+* `getPath()` : Retourne le dossier du fichier
+* `getSize()` : Retourne la taille du fichier en octets
 * `getContent()` : Retourne le contenu du fichier
 * `setContent($contenu)` : Spécifie le contenu du fichier
 * `move($nouveauChemin, $remplaceSiExistant)` : Déplace le fichier
@@ -78,3 +84,5 @@ Classe permettant des traitements sur le système.
 * `setMemoryLimit($memoryLimit)` : Détermine la mémoire limite (en octet par défaut) qu'un script est autoriser à allouer
 * `setTimeLimitIllimite()` : Fixe le temps d'exécution d'un script à illimité
 * `redirect($url)` : Redirige l'internaute
+* `getFileUploadMaxSize()` : Retourne la taille maximale en octet que peut avoir un fichier chargé par l'utilisateur
+* `getPhpSizeInBytes($phpSize)` : Retourne le nombre d'octets d'une taille en PHP
