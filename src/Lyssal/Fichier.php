@@ -36,6 +36,7 @@ class Fichier
     /**
      * Retourne le chemin du fichier.
      * 
+     * @deprecated Use getPathname
      * @return string Chemin (pathname) du fichier
      */
     public function getChemin()
@@ -44,8 +45,19 @@ class Fichier
     }
     
     /**
+     * Retourne le chemin du fichier.
+     * 
+     * @return string Chemin (pathname) du fichier
+     */
+    public function getPathname()
+    {
+        return $this->splFileInfo->getRealPath();
+    }
+    
+    /**
      * Retourne le nom (filename) du fichier.
      * 
+     * @deprecated Use getFilename
      * @return string Nom du fichier
      */
     public function getNom()
@@ -54,13 +66,49 @@ class Fichier
     }
     
     /**
+     * Retourne le nom (filename) du fichier.
+     * 
+     * @return string Nom du fichier
+     */
+    public function getFilename()
+    {
+        return $this->splFileInfo->getFilename();
+    }
+
+    /**
+     * Retourne le nom du fichier sans son extension.
+     * 
+     * @return string Nom du fichier sans extension
+     */
+    public function getFilenameWithoutExtension()
+    {
+        if (null !== $this->getExtension())
+        {
+            return substr( $this->getFilename(), 0, strlen($this->getFilename()) - strlen($this->getExtension() - 1) );
+        }
+
+        return $this->getFilename();
+    }
+
+    /**
      * Retourne l'extension du fichier.
      * 
-     * @return string Extension
+     * @return string|NULL Extension
      */
     public function getExtension()
     {
-        return $this->splFileInfo->getExtension();
+        return ( '' != $this->splFileInfo->getExtension() ? $this->splFileInfo->getExtension() : null );
+    }
+
+    /**
+     * Retourne le dossier du fichier.
+     * 
+     * @deprecated Use getPath
+     * @return string Dossier
+     */
+    public function getDossier()
+    {
+        return $this->splFileInfo->getPath();
     }
     
     /**
@@ -68,9 +116,19 @@ class Fichier
      * 
      * @return string Dossier
      */
-    public function getDossier()
+    public function getPath()
     {
         return $this->splFileInfo->getPath();
+    }
+    
+    /**
+     * Retourne la taille du fichier en octets.
+     * 
+     * @return integer Size
+     */
+    public function getSize()
+    {
+        return $this->splFileInfo->getSize();
     }
     
     /**
@@ -107,6 +165,11 @@ class Fichier
      */
     public function move($nouveauChemin, $remplaceSiExistant = false)
     {
+        if ('' == $nouveauChemin)
+        {
+            throw new \Exception('Impossible de déplacer car chemin vide.');
+        }
+
         if (false === $remplaceSiExistant)
             $nouveauChemin = self::getCheminLibre($nouveauChemin, '-');
     
