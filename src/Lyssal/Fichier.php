@@ -41,7 +41,7 @@ class Fichier
      */
     public function getChemin()
     {
-        return $this->splFileInfo->getRealPath();
+        return $this->getPathname();
     }
     
     /**
@@ -62,7 +62,7 @@ class Fichier
      */
     public function getNom()
     {
-        return $this->splFileInfo->getFilename();
+        return $this->getFilename();
     }
 
     /**
@@ -175,9 +175,9 @@ class Fichier
     
         $deplacementEstReussi = false;
         
-        if (is_uploaded_file($this->getChemin()))
-            $deplacementEstReussi = move_uploaded_file($this->getChemin(), $nouveauChemin);
-        else $deplacementEstReussi = rename($this->getChemin(), $nouveauChemin);
+        if (is_uploaded_file($this->getPathname()))
+            $deplacementEstReussi = move_uploaded_file($this->getPathname(), $nouveauChemin);
+        else $deplacementEstReussi = rename($this->getPathname(), $nouveauChemin);
         
         if ($deplacementEstReussi)
             $this->initSplFileInfo($nouveauChemin);
@@ -197,7 +197,7 @@ class Fichier
         if (false === $remplaceSiExistant)
             $chemin = self::getCheminLibre($chemin, '-');
     
-        if (copy($this->getChemin(), $chemin))
+        if (copy($this->getPathname(), $chemin))
             return new Fichier($chemin);
         return null;
     }
@@ -221,13 +221,13 @@ class Fichier
         $longueurMaximaleSoustrait = strlen($this->getExtension()) + 1;
         // Réduire la longueur si le fichier existe déjà (à cause de l'ajout d'un suffixe)
         if ($remplaceSiExistant)
-            $longueurMaximaleSoustrait += strlen(self::getCheminLibre($this->getDossier().'/'.$fichierNom, $separateur)) - strlen($this->getDossier().'/'.$fichierNom);
+            $longueurMaximaleSoustrait += strlen(self::getCheminLibre($this->getPath().DIRECTORY_SEPARATOR.$fichierNom, $separateur)) - strlen($this->getPath().DIRECTORY_SEPARATOR.$fichierNom);
         
         if (null !== $longueurMaximale)
             $fichierNom = substr($fichierNom, 0, $longueurMaximale - $longueurMaximaleSoustrait);
         $fichierNom .= '.'.$this->getExtension();
         
-        $this->move($this->getDossier().'/'.$fichierNom, $remplaceSiExistant);
+        $this->move($this->getPath().DIRECTORY_SEPARATOR.$fichierNom, $remplaceSiExistant);
         
         return $this;
     }

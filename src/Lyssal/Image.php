@@ -70,13 +70,13 @@ class Image extends Fichier
         switch ($this->type)
         {
             case IMAGETYPE_JPEG:
-                $this->resourceGd = imagecreatefromjpeg($this->getChemin());
+                $this->resourceGd = imagecreatefromjpeg($this->getPathname());
                 break;
             case IMAGETYPE_PNG:
-                $this->resourceGd = imagecreatefrompng($this->getChemin());
+                $this->resourceGd = imagecreatefrompng($this->getPathname());
                 break;
             case IMAGETYPE_GIF:
-                $this->resourceGd = imagecreatefromgif($this->getChemin());
+                $this->resourceGd = imagecreatefromgif($this->getPathname());
                 break;
             default:
                 throw new \Exception('Le format de l\'image n\'est pas correct.');
@@ -90,7 +90,7 @@ class Image extends Fichier
      */
     protected function initProprietes()
     {
-        $dimensions = getimagesize($this->getChemin());
+        $dimensions = getimagesize($this->getPathname());
 		$this->largeur = $dimensions[0];
 		$this->hauteur = $dimensions[1];
 		$this->type = $dimensions[2];
@@ -119,7 +119,7 @@ class Image extends Fichier
      */
     private function getImageFromFichier($fichier)
     {
-        return new Image($fichier->getChemin());
+        return new Image($fichier->getPathname());
     }
     
     /**
@@ -186,13 +186,13 @@ class Image extends Fichier
         switch ($this->type)
         {
             case IMAGETYPE_JPEG:
-                imagejpeg($resourceGd, $this->getChemin());
+                imagejpeg($resourceGd, $this->getPathname());
                 break;
             case IMAGETYPE_PNG:
-                imagepng($resourceGd, $this->getChemin());
+                imagepng($resourceGd, $this->getPathname());
                 break;
             case IMAGETYPE_GIF:
-                imagegif($resourceGd, $this->getChemin());
+                imagegif($resourceGd, $this->getPathname());
                 break;
             default:
                 throw new \Exception('Le format de l\'image n\'est pas correct.');
