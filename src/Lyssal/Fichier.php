@@ -64,7 +64,7 @@ class Fichier
     {
         return $this->splFileInfo->getFilename();
     }
-    
+
     /**
      * Retourne le nom (filename) du fichier.
      * 
@@ -74,7 +74,7 @@ class Fichier
     {
         return $this->splFileInfo->getFilename();
     }
-
+    
     /**
      * Retourne le nom du fichier sans son extension.
      * 
@@ -84,22 +84,22 @@ class Fichier
     {
         if (null !== $this->getExtension())
         {
-            return substr( $this->getFilename(), 0, strlen($this->getFilename()) - strlen($this->getExtension() - 1) );
+            return substr( $this->getFilename(), 0, strlen($this->getFilename()) - strlen($this->getExtension()) - 1 );
         }
 
         return $this->getFilename();
     }
-
+    
     /**
      * Retourne l'extension du fichier.
      * 
-     * @return string|NULL Extension
+     * @return string Extension
      */
     public function getExtension()
     {
-        return ( '' != $this->splFileInfo->getExtension() ? $this->splFileInfo->getExtension() : null );
+        return $this->splFileInfo->getExtension();
     }
-
+    
     /**
      * Retourne le dossier du fichier.
      * 
@@ -286,5 +286,21 @@ class Fichier
             $encodage = null;
 
         return $encodage;
+    }
+
+
+    /**
+     * Retourne l'extension d'un fichier.
+     *
+     * @param string $filename Nom du fichier
+     * @return string|NULL Extension
+     */
+    public static function getExtensionFromFile($filename)
+    {
+        if (false !== strpos($filename, '.')) {
+            return substr($filename, strrpos($filename, '.') + 1);
+        }
+
+        return null;
     }
 }

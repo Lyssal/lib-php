@@ -49,6 +49,9 @@ Permet de traiter des fichiers.
 * `normalizeEndLines()` : Normalise les fins de ligne d'un fichier
 * `getEncodage()` : Retourne l'encodage du fichier
 
+* `Lyssal::getExtensionFromFile($filename)` : Retourne l'extension d'un fichier
+
+
 
 ## Image
 

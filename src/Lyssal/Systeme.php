@@ -79,5 +79,5 @@ class Systeme
         }
 
         return $sizeValue;
-    }  
+    }
 }
