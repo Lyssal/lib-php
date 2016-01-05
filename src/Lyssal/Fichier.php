@@ -9,20 +9,31 @@ namespace Lyssal;
 class Fichier
 {
     /**
+     * @var string Chemin du fichier
+     */
+    private $pathname;
+
+    /**
      * @var \SplFileInfo SplFileInfo du fichier
      */
-    private $splFileInfo;
-    
+    private $splFileInfo = null;
+
+
     /**
      * Constructeur d'un fichier.
      *
-     * @param string $fichierPath Chemin du fichier à traiter
+     * @param string $pathname Chemin du fichier à traiter
      */
-    public function __construct($fichierPath)
+    public function __construct($pathname)
     {
-        $this->initSplFileInfo($fichierPath);
+        $this->pathname = $pathname;
+
+        if (file_exists($pathname)) {
+            $this->initSplFileInfo($pathname);
+        }
     }
-    
+
+
     /**
      * Initialise le SplFileInfo.
      *
@@ -32,7 +43,8 @@ class Fichier
     {
         $this->splFileInfo = new \SplFileInfo($fichierPath);
     }
-    
+
+
     /**
      * Retourne le chemin du fichier.
      * 
@@ -45,13 +57,13 @@ class Fichier
     }
     
     /**
-     * Retourne le chemin du fichier.
+     * Retourne le chemin du fichier / URL.
      * 
      * @return string Chemin (pathname) du fichier
      */
     public function getPathname()
     {
-        return $this->splFileInfo->getRealPath();
+        return (null !== $this->splFileInfo ? $this->splFileInfo->getRealPath() : $this->pathname);
     }
     
     /**
@@ -66,38 +78,49 @@ class Fichier
     }
 
     /**
-     * Retourne le nom (filename) du fichier.
+     * Retourne le nom (filename) du fichier / URL.
      * 
      * @return string Nom du fichier
      */
     public function getFilename()
     {
-        return $this->splFileInfo->getFilename();
+        return (
+            null !== $this->splFileInfo
+                ? $this->splFileInfo->getFilename()
+                : (
+                    $this->isUrl()
+                        ? (substr($this->pathname, strrpos($this->pathname, '/') + 1))
+                        : (substr($this->pathname, strrpos($this->pathname, DIRECTORY_SEPARATOR) + 1))
+                )
+        );
     }
     
     /**
-     * Retourne le nom du fichier sans son extension.
+     * Retourne le nom du fichier / URL sans son extension.
      * 
      * @return string Nom du fichier sans extension
      */
     public function getFilenameWithoutExtension()
     {
-        if (null !== $this->getExtension())
-        {
-            return substr( $this->getFilename(), 0, strlen($this->getFilename()) - strlen($this->getExtension()) - 1 );
+        if (null !== $this->getExtension()) {
+            return substr($this->getFilename(), 0, strlen($this->getFilename()) - strlen($this->getExtension()) - 1);
         }
 
         return $this->getFilename();
     }
     
     /**
-     * Retourne l'extension du fichier.
+     * Retourne l'extension du fichier / URL.
      * 
      * @return string Extension
      */
     public function getExtension()
     {
-        return $this->splFileInfo->getExtension();
+        return (
+            null !== $this->splFileInfo
+                ? $this->splFileInfo->getExtension()
+                : substr($this->pathname, strrpos($this->pathname, '.') + 1)
+        );
     }
     
     /**
@@ -112,13 +135,21 @@ class Fichier
     }
     
     /**
-     * Retourne le dossier du fichier.
+     * Retourne le dossier du fichier / URL.
      * 
      * @return string Dossier
      */
     public function getPath()
     {
-        return $this->splFileInfo->getPath();
+        return (
+            null !== $this->splFileInfo
+                ? $this->splFileInfo->getPath()
+                : (
+                    $this->isUrl()
+                        ? (substr($this->pathname, 0, strrpos($this->pathname, '/')))
+                        : (substr($this->pathname, 0, strrpos($this->pathname, DIRECTORY_SEPARATOR)))
+                )
+        );
     }
     
     /**
@@ -155,7 +186,17 @@ class Fichier
     {
         file_put_contents($this->splFileInfo->getRealPath(), $contenu);
     }
-    
+
+    /**
+     * Retourne si le chemin du fichier est une URL.
+     *
+     * @return boolean VRAI si URL
+     */
+    public function isUrl()
+    {
+        return (false !== filter_var($this->pathname, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED));
+    }
+
     /**
      * Déplace le fichier.
      *

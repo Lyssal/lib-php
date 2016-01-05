@@ -32,16 +32,17 @@ Permet de traiter des fichiers CSV.
 
 ## Fichier
 
-Permet de traiter des fichiers.
+Permet de traiter des fichiers ou d'obtenir certaines informations s'il s'agit d'une URL.
 
-* `getPathname()` : Retourne le chemin du fichier
-* `getFilename()` : Retourne le nom du fichier
-* `getFilenameWithoutExtension()` : Retourne le nom du fichier sans son extension
-* `getExtension()` : Retourne l'extension du fichier
-* `getPath()` : Retourne le dossier du fichier
+* `getPathname()` : Retourne le chemin du fichier / URL
+* `getFilename()` : Retourne le nom du fichier / URL
+* `getFilenameWithoutExtension()` : Retourne le nom du fichier / URL sans son extension
+* `getExtension()` : Retourne l'extension du fichier / URL
+* `getPath()` : Retourne le dossier du fichier / URL
 * `getSize()` : Retourne la taille du fichier en octets
 * `getContent()` : Retourne le contenu du fichier
 * `setContent($contenu)` : Spécifie le contenu du fichier
+* `isUrl()` : Retourne si le chemin du fichier est une URL
 * `move($nouveauChemin, $remplaceSiExistant)` : Déplace le fichier
 * `copy($chemin, $remplaceSiExistant)` : Copie le fichier
 * `setNomMinifie($nouveauNom, $separateur, $toutEnMinuscule, $longueurMaximale, $remplaceSiExistant)` : Minifie le nom du fichier
