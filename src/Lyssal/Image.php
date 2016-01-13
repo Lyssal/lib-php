@@ -91,9 +91,10 @@ class Image extends Fichier
     protected function initProprietes()
     {
         $dimensions = getimagesize($this->getPathname());
-		$this->largeur = $dimensions[0];
-		$this->hauteur = $dimensions[1];
-		$this->type = $dimensions[2];
+
+        $this->largeur = $dimensions[0];
+        $this->hauteur = $dimensions[1];
+        $this->type = $dimensions[2];
     }
     
     /**
@@ -106,8 +107,9 @@ class Image extends Fichier
     public function copy($chemin, $remplaceSiExistant = false)
     {
         $fichier = parent::copy($chemin, $remplaceSiExistant);
-        if (null !== $fichier)
+        if (null !== $fichier) {
             return $this->getImageFromFichier($fichier);
+        }
         
         return null;
     }
