@@ -1,53 +1,18 @@
 <?php
 namespace Lyssal;
 
+use Lyssal\Texte;
+
 /**
  * Classe permettant de manipuler des chaînes de caractères.
- * 
+ *
  * @author Rémi Leclerc
  */
-class Chaine
+class Chaine extends Texte
 {
     /**
-     * @var string Texte manipulé
-     */
-    protected $texte;
-
-    /**
-     * Constructeur de Chaine.
-     *
-     * @param string $texte Texte à manipuler
-     */
-    public function __construct($texte)
-    {
-        $this->texte = $texte;
-    }
-    
-    /**
-     * Retourne le texte manipulé.
-     * 
-     * @return string Texte
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-    
-    /**
-     * Remplace dans le texte.
-     * Cette méthode est semblable à str_replace().
-     * 
-     * @param string|array $recherche    Contenu à rechercher
-     * @param string|array $remplacement Contenu de remplacement
-     */
-    public function replace($recherche, $remplacement)
-    {
-        $this->texte = str_replace($recherche, $remplacement, $this->texte);
-    }
-    
-    /**
      * Supprime les accents du texte.
-     * 
+     *
      * @return string \Lyssal\Chaine La chaîne sans accents
      */
     public function supprimeAccents()
@@ -131,18 +96,6 @@ class Chaine
     public function br2nl()
     {
         $this->texte = preg_replace('/\<br(\s*)?\/?\>/i', PHP_EOL, $this->texte);
-    
-        return $this;
-    }
-    
-    /**
-     * Encode la chaîne en HTML.
-     *
-     * @return \Lyssal\Chaine La chaîne de caractères HTML.
-     */
-    public function encodeHtml()
-    {
-        $this->texte = str_replace(array('&lt;','&gt;','&amp;'), array('<','>','&'), htmlentities($this->texte, ENT_NOQUOTES, 'UTF-8'));
     
         return $this;
     }

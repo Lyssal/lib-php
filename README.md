@@ -3,17 +3,28 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4e86aafd-eadd-4fc7-8433-da8f3605db49/small.png)](https://insight.sensiolabs.com/projects/4e86aafd-eadd-4fc7-8433-da8f3605db49)
 
 
-## Chaine
+## Texte (classe abstraite)
 
-Permet de traiter des chaînes de caractères.
+Permet de traiter du texte.
 
+* `getTexte()` : Récupère le texte
 * `replace()` : Remplace dans le texte
+* `encodeHtml()` : Encode la chaîne en HTML
+
+### Chaine (étend Texte)
+
+Permet de traiter une chaîne de caractères.
+
 * `supprimeAccents()` : Supprime les accents de la chaîne de caractères
 * `minifie($separateur, $toutEnMinuscule)` : Simplifie la chaîne de caractères (pour une URL par exemple)
 * `hasLettre()` : Retourne si la chaîne contient au moins une lettre
 * `hasChiffre()` : Retourne si la chaîne contient au moins un chiffre
 * `br2nl()` : Remplace les <br> en \n
-* `encodeHtml()` : Encode la chaîne en HTML
+
+### HTML (étend Texte)
+
+* `makeClickableLinks()` : Transforme les URL en liens HREF
+* `makeClickableEmails()` : Transforme les adresses électroniques en liens MAILTO
 
 
 ## Csv
