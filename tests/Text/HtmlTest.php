@@ -1,0 +1,64 @@
+<?php
+use Lyssal\Text\Html;
+
+/**
+ * Test de Html.
+ */
+class HtmlTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Test makeClickableLinks().
+     */
+    public function testMakeClickableLinks()
+    {
+        $html = new Html('<div> http://www.google.fr </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="http://www.google.fr">http://www.google.fr</a> </div>');
+
+        $html = new Html('<div> www.google.fr/ </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="http://www.google.fr/">www.google.fr/</a> </div>');
+
+        $html = new Html('<div> google.fr </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="http://google.fr">google.fr</a> </div>');
+
+        $html = new Html('<div> ww.google.fr </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="http://ww.google.fr">ww.google.fr</a> </div>');
+
+        $html = new Html('<div> https://ww.google.fr </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="https://ww.google.fr">https://ww.google.fr</a> </div>');
+
+        $html = new Html('<div> <a href="http://www.google.fr">Google</a> </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="http://www.google.fr">Google</a> </div>');
+
+        $html = new Html('<div> <a href="https://www.google.fr/">Google</a> </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="https://www.google.fr/">Google</a> </div>');
+
+        $html = new Html('<div> www.google.fr/images </div>');
+        $html->makeClickableLinks();
+        $this->assertEquals($html->getText(), '<div> <a href="http://www.google.fr/images">www.google.fr/images</a> </div>');
+    }
+
+    /**
+     * Test makeClickableEmails().
+     */
+    public function testMakeClickableEmails()
+    {
+        $html = new Html('<div> toto@exemple.fr </div>');
+        $html->makeClickableEmails();
+        $this->assertEquals($html->getText(), '<div> <a href="mailto:toto@exemple.fr">toto@exemple.fr</a> </div>');
+
+        $html = new Html('<div> <a href="mailto:toto@exemple.fr">Toto</a> </div>');
+        $html->makeClickableEmails();
+        $this->assertEquals($html->getText(), '<div> <a href="mailto:toto@exemple.fr">Toto</a> </div>');
+
+        $html = new Html('<div> <a href="mailto:toto@exemple.fr">toto@exemple.fr</a> </div>');
+        $html->makeClickableEmails();
+        $this->assertEquals($html->getText(), '<div> <a href="mailto:toto@exemple.fr">toto@exemple.fr</a> </div>');
+    }
+}
