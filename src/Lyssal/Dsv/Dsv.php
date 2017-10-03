@@ -188,7 +188,7 @@ class Dsv
     {
         if (null !== $this->sourceCharset && null !== $this->targetCharset) {
             foreach ($line as $i => $value) {
-                $ligne[$i] = iconv($this->sourceCharset, $this->targetCharset, $value);
+                $line[$i] = iconv($this->sourceCharset, $this->targetCharset, $value);
             }
         }
 

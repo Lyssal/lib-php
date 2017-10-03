@@ -27,6 +27,6 @@ class Tsv extends Dsv
      */
     public function __construct($file, $delimiter = "\t", $enclosure = '"')
     {
-        parent::__construct($file, $delimiter = ',', $enclosure = '"');
+        parent::__construct($file, $delimiter, $enclosure);
     }
 }
