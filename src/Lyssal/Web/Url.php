@@ -43,7 +43,7 @@ class Url
     {
         if (null === $this->status) {
             $urlMatches = [];
-            $urlHeaders = @get_headers($this->url);
+            $urlHeaders = get_headers($this->url);
 
             if (preg_match('/^HTTP\/([0-9\.]+)\ ([0-9]{3})\ /', $urlHeaders[0], $urlMatches)) {
                 $this->status = new Status((int) $urlMatches[2]);
