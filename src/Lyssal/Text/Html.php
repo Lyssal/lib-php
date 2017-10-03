@@ -13,9 +13,26 @@ namespace Lyssal\Text;
 class Html extends AbstractText
 {
     /**
+     * Delete tags.
+     *
+     * @param string[] $tags Tags to delete
+     * @return \Lyssal\Text\Html This
+     */
+    public function deleteTags(array $tags)
+    {
+        $tagsToDeleteRegex = array();
+        foreach ($tags as $tagToDelete) {
+            $tagsToDeleteRegex[] = '@<'.$tagToDelete.'[^>]*?>.*?</'.$tagToDelete.'>@siu';
+        }
+        $this->text = preg_replace($tagsToDeleteRegex, '', $this->text);
+
+        return $this;
+    }
+
+    /**
      * Transforms isolated URL into HTTM links.
      *
-     * @return \Lyssal\Text\Html Html
+     * @return \Lyssal\Text\Html This
      */
     public function makeClickableLinks()
     {
@@ -67,7 +84,7 @@ class Html extends AbstractText
     /**
      * Transforms isolated emails into mailto links.
      *
-     * @return \Lyssal\Text\Html Html
+     * @return \Lyssal\Text\Html This
      */
     public function makeClickableEmails()
     {

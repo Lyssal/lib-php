@@ -11,6 +11,7 @@ use finfo;
 use Lyssal\Exception\IoException;
 use Lyssal\Text\SimpleString;
 use Lyssal\Text\Slug;
+use Lyssal\Web\Url;
 
 /**
  * Class to manipulate files.
@@ -41,11 +42,7 @@ class File
      */
     public function __construct($pathname)
     {
-        $this->pathname = $pathname;
-
-        if (file_exists($pathname)) {
-            $this->initSplFileInfo($pathname);
-        }
+        $this->setPathname($pathname);
     }
 
 
@@ -66,7 +63,11 @@ class File
      */
     protected function initSplFileInfo($pathname)
     {
-        $this->splFileInfo = new \SplFileInfo($pathname);
+        $this->splFileInfo = null;
+
+        if (!$this->isUrl() && $this->exists()) {
+            $this->splFileInfo = new \SplFileInfo($pathname);
+        }
     }
 
 
@@ -78,6 +79,31 @@ class File
     public function getPathname()
     {
         return (null !== $this->splFileInfo ? $this->splFileInfo->getRealPath() : $this->pathname);
+    }
+
+    /**
+     * Set the file or URL pathname.
+     *
+     * @param string $pathname The pathname
+     */
+    public function setPathname($pathname)
+    {
+        $this->pathname = $pathname;
+        $this->initSplFileInfo($pathname);
+    }
+
+    /**
+     * Get the real file or URL pathname.
+     *
+     * @return string The real pathname
+     */
+    public function getRealPathname()
+    {
+        if ($this->isUrl()) {
+            return $this->pathname;
+        }
+
+        return (null !== $this->splFileInfo ? $this->splFileInfo->getRealPath() : realpath($this->pathname));
     }
 
     /**
@@ -211,19 +237,38 @@ class File
     }
 
     /**
+     * Return the URL if it is.
+     *
+     * @return \Lyssal\Web\Url|null The URL
+     */
+    public function getUrl()
+    {
+        if ($this->isUrl()) {
+            return new Url($this->getPathname());
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the FileContent object.
+     *
+     * @return \Lyssal\File\FileContent The FileContent
+     */
+    public function getFileContent()
+    {
+        return new FileContent($this);
+    }
+
+    /**
      * Get the file content.
      *
      * @return string|null Content or NULL is unreadable
      */
     public function getContent()
     {
-        $content = file_get_contents($this->splFileInfo->getRealPath());
-
-        if (false === $content) {
-            $content = null;
-        }
-
-        return $content;
+        $fileContent = new FileContent($this);
+        return $fileContent->get();
     }
 
     /**
@@ -234,13 +279,8 @@ class File
      */
     public function setContent($content)
     {
-        $contentSize = file_put_contents($this->getPathname(), $content);
-
-        if (false === $contentSize) {
-            throw new IoException('Not authorized to write in "'.$this->getFilename().'".');
-        } else {
-            clearstatcache(true, $this->getPathname());
-        }
+        $fileContent = new FileContent($this);
+        $fileContent->set($content);
     }
 
     /**
@@ -259,29 +299,31 @@ class File
     /**
      * Move the file to an directory.
      *
-     * @param string $destinationDirectory The destination directory
-     * @param bool   $replace              If the file has to be replaced if already existing or renamed
+     * @param string                                         $destinationDirectory The destination directory
+     * @param bool                                           $replace              If the file has to be replaced if already existing or renamed
+     * @param array|resource|\Lyssal\File\StreamContext|null $streamContext        A Lyssal\File\StreamContext object or a resource stream context or the stream context's options
      * @return bool If the move has successed
      * @throws \Lyssal\Exception\IoException If destination is empty
      */
-    public function moveToDirectory($destinationDirectory, $replace = false)
+    public function moveToDirectory($destinationDirectory, $replace = false, $streamContext = null)
     {
         if (DIRECTORY_SEPARATOR !== substr($destinationDirectory, -1)) {
             $destinationDirectory .= DIRECTORY_SEPARATOR;
         }
 
-        return $this->move($destinationDirectory.$this->getFilename(), $replace);
+        return $this->move($destinationDirectory.$this->getFilename(), $replace, $streamContext);
     }
 
     /**
      * Move the file.
      *
-     * @param string $destination File destination
-     * @param bool   $replace     If true, replace the file if it already exists at the destination else the file will be renamed if the destination exists
+     * @param string                                         $destination   File destination
+     * @param bool                                           $replace       If true, replace the file if it already exists at the destination else the file will be renamed if the destination exists
+     * @param array|resource|\Lyssal\File\StreamContext|null $streamContext A Lyssal\File\StreamContext object or a resource stream context or the stream context's options
      * @return bool If the move has successed
      * @throws \Lyssal\Exception\IoException If destination is empty
      */
-    public function move($destination, $replace = false)
+    public function move($destination, $replace = false, $streamContext = null)
     {
         if (empty($destination)) {
             throw new IoException('Cannot move file in an empty destination.');
@@ -294,11 +336,16 @@ class File
         if (is_uploaded_file($this->getPathname())) {
             $hasMoved = move_uploaded_file($this->getPathname(), $destination);
         } else {
-            $hasMoved = rename($this->getPathname(), $destination);
+            $realStreamContext = StreamContext::getRealStreamContext($streamContext);
+            if (null === $realStreamContext) {
+                $hasMoved = rename($this->getPathname(), $destination);
+            } else {
+                $hasMoved = rename($this->getPathname(), $destination, $realStreamContext);
+            }
         }
 
         if ($hasMoved) {
-            $this->initSplFileInfo($destination);
+            $this->setPathname($destination);
         }
 
         return $hasMoved;
@@ -307,34 +354,43 @@ class File
     /**
      * Copy the file in an directory.
      *
-     * @param string $destinationDirectory The destination directory
-     * @param bool   $replace              If the file has to be replaced if already existing or renamed
+     * @param string                                         $destinationDirectory The destination directory
+     * @param bool                                           $replace              If the file has to be replaced if already existing or renamed
+     * @param array|resource|\Lyssal\File\StreamContext|null $streamContext        A Lyssal\File\StreamContext object or a resource stream context or the stream context's options
      * @return \Lyssal\File\File|null Created file or NULL if the copy has failed
      * @throws \Lyssal\Exception\IoException If destination is empty
      */
-    public function copyToDirectory($destinationDirectory, $replace = false)
+    public function copyToDirectory($destinationDirectory, $replace = false, $streamContext = null)
     {
         if (DIRECTORY_SEPARATOR !== substr($destinationDirectory, -1)) {
             $destinationDirectory .= DIRECTORY_SEPARATOR;
         }
 
-        return $this->copy($destinationDirectory.$this->getFilename(), $replace);
+        return $this->copy($destinationDirectory.$this->getFilename(), $replace, $streamContext);
     }
 
     /**
      * Copy the file.
      *
-     * @param string $destination File destination
-     * @param bool   $replace     If true, replace the file if it already exists at the destination else the file will be renamed if the destination exists
+     * @param string                                         $destination   File destination
+     * @param bool                                           $replace       If true, replace the file if it already exists at the destination else the file will be renamed if the destination exists
+     * @param array|resource|\Lyssal\File\StreamContext|null $streamContext A Lyssal\File\StreamContext object or a resource stream context or the stream context's options
      * @return \Lyssal\File\File|null Created file or NULL if the copy has failed
      */
-    public function copy($destination, $replace = false)
+    public function copy($destination, $replace = false, $streamContext = null)
     {
         if (false === $replace) {
             $destination = self::getUnoccupiedPathname($destination, self::$SEPARATOR_DEFAULT);
         }
 
-        if (copy($this->getPathname(), $destination)) {
+        $realStreamContext = StreamContext::getRealStreamContext($streamContext);
+        if (null === $realStreamContext) {
+            $hasCopied = copy($this->getPathname(), $destination);
+        } else {
+            $hasCopied = copy($this->getPathname(), $destination, $realStreamContext);
+        }
+
+        if ($hasCopied) {
             return new static($destination);
         }
 
@@ -344,19 +400,25 @@ class File
     /**
      * Delete the file.
      *
+     * @param array|resource|\Lyssal\File\StreamContext|null $streamContext A Lyssal\File\StreamContext object or a resource stream context or the stream context's options
      * @return bool If success
      */
-    public function delete()
+    public function delete($streamContext = null)
     {
         if ($this->exists()) {
-            return unlink($this->getPathname());
+            $realStreamContext = StreamContext::getRealStreamContext($streamContext);
+            if (null === $realStreamContext) {
+                return unlink($this->getPathname());
+            } else {
+                return unlink($this->getPathname(), $realStreamContext);
+            }
         }
 
         return false;
     }
 
     /**
-     * Minify the filename.
+     * Minify the file.
      *
      * @param string $filename  (optional) The new filename ; by default the filename of the current File ; the extension is optionnal
      * @param string $separator (optional) The separator which replace special caracters

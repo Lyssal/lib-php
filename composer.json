@@ -1,6 +1,6 @@
 {
 	"name" : "lyssal/lib-php",
-	"description" : "The Lyssal PHP library.",
+	"description" : "The Lyssal PHP library ; manipulate text, files and images, open CSV files, etc.",
 	"license" : "proprietary",
 	"keywords" : [
 		"php",

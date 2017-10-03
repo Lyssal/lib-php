@@ -7,6 +7,26 @@ use Lyssal\Text\Html;
 class HtmlTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Test deleteTags().
+     */
+    public function testDeleteTags()
+    {
+        $htmlTest = '<p>Nous avons déjà esquissé cette <strong>petite <em>figure</em> sombre</strong>. <strong>Cosette</strong> était <em>maigre</em> et <em>blême</em>.</p>';
+
+        $html = new Html($htmlTest);
+        $html->deleteTags(['p']);
+        $this->assertEquals($html->getText(), '');
+
+        $html = new Html($htmlTest);
+        $html->deleteTags(['strong']);
+        $this->assertEquals($html->getText(), '<p>Nous avons déjà esquissé cette .  était <em>maigre</em> et <em>blême</em>.</p>');
+
+        $html = new Html($htmlTest);
+        $html->deleteTags(['strong', 'em']);
+        $this->assertEquals($html->getText(), '<p>Nous avons déjà esquissé cette .  était  et .</p>');
+    }
+
+    /**
      * Test makeClickableLinks().
      */
     public function testMakeClickableLinks()

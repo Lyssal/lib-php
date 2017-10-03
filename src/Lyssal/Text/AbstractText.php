@@ -32,11 +32,21 @@ abstract class AbstractText
     /**
      * Return the manipulated text.
      *
-     * @return string Text
+     * @return string The text
      */
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * Set the text.
+     *
+     * @param string $text Tthe new text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
     }
 
 

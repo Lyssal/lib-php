@@ -10,7 +10,7 @@ namespace Lyssal\Exception;
 use Exception;
 
 /**
- * Exception in the Lyssal library.
+ * A general exception.
  */
 class LyssalException extends Exception
 {

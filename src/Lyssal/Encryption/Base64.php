@@ -7,12 +7,10 @@
  */
 namespace Lyssal\Encryption;
 
-use Lyssal\Encryption;
-
 /**
  * Encryption with base64.
  */
-class Base64 extends Encryption
+class Base64 extends AbstractEncryption
 {
     /**
      * Encode an URL in 64 bits.
