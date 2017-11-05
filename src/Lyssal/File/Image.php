@@ -43,7 +43,9 @@ class Image extends File
         parent::__construct($imagePathname);
 
         $this->initProperties();
-        $this->initGdResource();
+        if ($this->formatIsManaged()) {
+            $this->initGdResource();
+        }
     }
 
 
@@ -85,8 +87,20 @@ class Image extends File
     {
         $imageSize = getimagesize($this->getPathname());
 
-        $this->dimension = new Dimension($imageSize[0], $imageSize[1]);
-        $this->type = $imageSize[2];
+        if (false !== $imageSize) {
+            $this->dimension = new Dimension($imageSize[0], $imageSize[1]);
+            $this->type = $imageSize[2];
+        }
+    }
+
+    /**
+     * Return if the image format is managed.
+     *
+     * @return bool If managed
+     */
+    public function formatIsManaged()
+    {
+        return (null !== $this->type);
     }
 
     /**
