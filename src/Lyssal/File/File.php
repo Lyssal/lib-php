@@ -184,6 +184,18 @@ class File
 
 
     /**
+     * Return if the file has this extension.
+     *
+     * @param string $extension The extension
+     *
+     * @return bool If has extension
+     */
+    public function extensionIs($extension)
+    {
+        return strtolower($this->getExtension()) === strtolower($extension);
+    }
+
+    /**
      * Return if file exists.
      *
      * @return bool If exists
