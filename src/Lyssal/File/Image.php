@@ -144,13 +144,21 @@ class Image extends File
             } else {
                 return;
             }
-        } elseif (($height / $width) > ($this->getHeight() / $this->getWidth())) { // Trim width
-            $originalRectangle->setX((int) (($this->getWidth() - $this->getHeight()) * ($width / $height) / 2));
-            $originalRectangle->setWidth($originalRectangle->getHeight());
-        } elseif (($height / $width) < ($this->getHeight() / $this->getWidth())) { // Trim height
-            $originalRectangle->setY((int) (($this->getHeight() - $this->getWidth()) * ($height / $width) / 2));
-            $originalRectangle->setHeight($originalRectangle->getWidth());
+        } else {
+            $oldRatio = $this->getHeight() / $this->getWidth();
+            $newRatio = $height / $width;
+
+            if ($newRatio > $oldRatio) { // Trim width
+                $originalRectangle->setX((int) (($originalRectangle->getWidth() - $width * $this->getHeight() / $height) / 2));
+                $originalRectangle->setWidth($width * $this->getHeight() / $height);
+
+
+            } elseif ($newRatio < $oldRatio) { // Trim height
+                $originalRectangle->setY((int) (($originalRectangle->getHeight() - $height * $this->getWidth() / $width) / 2));
+                $originalRectangle->setHeight($height * $this->getWidth() / $width);
+            }
         }
+
         $resizedRectangle = new Rectangle(0, 0, $width, $height);
 
         if ($this->getWidth() !== $resizedRectangle->getWidth() || $this->getHeight() !== $resizedRectangle->getHeight()) {
