@@ -166,6 +166,31 @@ class Image extends File
     }
 
     /**
+     * Resize proportionnaly the image defining a max width and a max height.
+     *
+     * @param int $maxWidth  The max width
+     * @param int $maxHeight The max height
+     */
+    public function resizeProportionallyByMaxSize($maxWidth, $maxHeight)
+    {
+        $width = $this->getWidth();
+        $height = $this->getHeight();
+
+        if ($width > $maxWidth) {
+            $ratio = $width / $maxWidth;
+            $width = $maxWidth;
+            $height = $height / $ratio;
+        }
+        if ($height > $maxHeight) {
+            $ratio = $height / $maxHeight;
+            $height = $maxHeight;
+            $width = $width / $ratio;
+        }
+
+        $this->resize((int) $width, (int) $height);
+    }
+
+    /**
      * Save the GD resource.
      *
      * @param resource $gdResource The GD resource
