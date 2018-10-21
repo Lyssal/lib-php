@@ -13,6 +13,12 @@ namespace Lyssal\Text;
 class SimpleString extends AbstractText
 {
     /**
+     * @var string The allowed characters when we minify the string
+     */
+    public static $MINIFICATION_ALLOWED_CHARACTERS = 'a-zA-Z0-9';
+
+
+    /**
      * Delete accents.
      *
      * @return \Lyssal\Text\SimpleString String without accent
@@ -41,7 +47,7 @@ class SimpleString extends AbstractText
 
         $this->text = trim(
             preg_replace(
-                '/([^a-zA-Z0-9])+/',
+                '/([^'.self::$MINIFICATION_ALLOWED_CHARACTERS.'])+/',
                 $separator,
                 str_replace(
                     array(',', ';', '?', '!', ':', '"', '{', '}', '(', ')', '[', ']', '«', '»', '='),
