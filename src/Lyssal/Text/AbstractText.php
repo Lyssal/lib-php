@@ -42,7 +42,7 @@ abstract class AbstractText
     /**
      * Set the text.
      *
-     * @param string $text Tthe new text
+     * @param string $text The new text
      */
     public function setText($text)
     {
@@ -55,16 +55,20 @@ abstract class AbstractText
      *
      * @param string|array<string> $search  Value to search
      * @param string|array<string> $replace Replacement
+     *
+     * @return \Lyssal\Text\AbstractText The text
      */
     public function replace($search, $replace)
     {
         $this->text = str_replace($search, $replace, $this->text);
+
+        return $this;
     }
 
     /**
      * Replace <br> into \n.
      *
-     * @return \Lyssal\Text The string
+     * @return \Lyssal\Text\AbstractText The text
      */
     public function br2nl()
     {
@@ -76,7 +80,7 @@ abstract class AbstractText
     /**
      * Encode text in HTML.
      *
-     * @return \Lyssal\Text HTML
+     * @return \Lyssal\Text\AbstractText The text
      */
     public function encodeHtml()
     {
