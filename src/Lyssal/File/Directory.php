@@ -41,6 +41,15 @@ class Directory
         return $this->path;
     }
 
+    /**
+     * Determine if the directory exists.
+     *
+     * @return bool If it exists
+     */
+    public function exists(): bool
+    {
+        return is_dir($this->path);
+    }
 
     /**
      * Get the directory file pathnames.
