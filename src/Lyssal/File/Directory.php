@@ -7,6 +7,8 @@
  */
 namespace Lyssal\File;
 
+use Lyssal\Exception\IoException;
+
 /**
  * Class to read directories.
  */
@@ -49,6 +51,24 @@ class Directory
     public function exists(): bool
     {
         return is_dir($this->path);
+    }
+
+    /**
+     * Create the directory.
+     *
+     * @throws \Lyssal\Exception\IoException If the directory already exists
+     *
+     * @return \Lyssal\File\Directory Self
+     */
+    public function create(): self
+    {
+        if ($this->exists()) {
+            throw new IoException('The directory "'.$this->path.'" already exists.');
+        }
+
+        mkdir($this->path);
+
+        return $this;
     }
 
     /**
