@@ -52,6 +52,16 @@ class Directory
     }
 
     /**
+     * Get the file count.
+     *
+     * @return int The count
+     */
+    public function getFileCount(): int
+    {
+        return iterator_count(new \FilesystemIterator($this->path, \FilesystemIterator::SKIP_DOTS));
+    }
+
+    /**
      * Get the directory file pathnames.
      *
      * @param bool $recursive If files in subdirectories are searched
