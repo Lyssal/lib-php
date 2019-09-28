@@ -1,10 +1,11 @@
 <?php
 use Lyssal\File\StreamContext;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de StreamContext.
  */
-class StreamContextTest extends PHPUnit_Framework_TestCase
+class StreamContextTest extends TestCase
 {
     /**
      * Test StreamContext.

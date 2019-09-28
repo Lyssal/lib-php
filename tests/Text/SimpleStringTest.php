@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Text\SimpleString;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de SimpleString.
  */
-class SimpleStringTest extends PHPUnit_Framework_TestCase
+class SimpleStringTest extends TestCase
 {
     /**
      * @var string String example

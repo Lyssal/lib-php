@@ -1,10 +1,11 @@
 <?php
 use Lyssal\File\Image;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Image.
  */
-class ImageTest extends PHPUnit_Framework_TestCase
+class ImageTest extends TestCase
 {
     /**
      * Test Image.

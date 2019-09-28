@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Color\Color;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Color.
  */
-class ColorTest extends PHPUnit_Framework_TestCase
+class ColorTest extends TestCase
 {
     /**
      * Test new Color().

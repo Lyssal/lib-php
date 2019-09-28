@@ -1,10 +1,11 @@
 <?php
 use Lyssal\File\File;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de File.
  */
-class FileTest extends PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     /**
      * Test File.

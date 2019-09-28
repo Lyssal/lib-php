@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Text\Html;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Html.
  */
-class HtmlTest extends PHPUnit_Framework_TestCase
+class HtmlTest extends TestCase
 {
     /**
      * Test deleteTags().

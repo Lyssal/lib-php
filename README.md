@@ -8,7 +8,8 @@
 Execute :
 
 ```sh
-phpunit --bootstrap tests/autoload.php tests
+make install-dev
+make phpunit
 ```
 
 
@@ -17,5 +18,5 @@ phpunit --bootstrap tests/autoload.php tests
 Execute :
 
 ```sh
-phpdoc -c doc/phpdoc.tpl.xml
+make phpdoc
 ```

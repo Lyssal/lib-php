@@ -1,11 +1,12 @@
 <?php
 use Lyssal\Web\Http\Status;
 use Lyssal\Web\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Url.
  */
-class UrlTest extends PHPUnit_Framework_TestCase
+class UrlTest extends TestCase
 {
     /**
      * @var string Google

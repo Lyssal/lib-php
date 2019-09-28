@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Text\Slug;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Slug.
  */
-class SlugTest extends PHPUnit_Framework_TestCase
+class SlugTest extends TestCase
 {
     /**
      * Test next().

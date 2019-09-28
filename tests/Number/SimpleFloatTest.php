@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Number\SimpleFloat;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de SimpleFloat.
  */
-class SimpleFloatTest extends PHPUnit_Framework_TestCase
+class SimpleFloatTest extends TestCase
 {
     /**
      * Test minify().
@@ -12,9 +13,9 @@ class SimpleFloatTest extends PHPUnit_Framework_TestCase
     public function testParse()
     {
         $float = SimpleFloat::parse('1.6');
-        $this->assertEquals(1.6, $float->getFloat());
+        $this->assertEquals(1.6, $float);
 
-        $float = SimpleFloat::parse('2,12');
+        $float = new SimpleFloat('2,12');
         $this->assertEquals(2.12, $float->getFloat());
     }
 }

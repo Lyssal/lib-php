@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Encryption\Base64;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Html.
  */
-class Base64Test extends PHPUnit_Framework_TestCase
+class Base64Test extends TestCase
 {
     /**
      * Test urlEncode() ans urlDecode().

@@ -1,10 +1,11 @@
 <?php
 use Lyssal\Math\Geometry\Geometry2d\Rectangle;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de Rectangle.
  */
-class RectangleTest
+class RectangleTest extends TestCase
 {
     /**
      * Test constructor.

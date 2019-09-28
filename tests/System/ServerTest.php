@@ -1,10 +1,11 @@
 <?php
 use Lyssal\System\Server;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test de System.
  */
-class SystemTest extends PHPUnit_Framework_TestCase
+class SystemTest extends TestCase
 {
     /**
      * Test getPhpSizeInBytes().
