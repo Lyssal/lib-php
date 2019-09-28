@@ -21,11 +21,11 @@ class SimpleFloat
     /**
      * Constructor.
      *
-     * @param float $float The float to manage
+     * @param float|mixed $float The float to manage
      */
     public function __construct($float)
     {
-        $this->float = $float;
+        $this->float = self::parse($float);
     }
 
     /**
@@ -50,12 +50,14 @@ class SimpleFloat
 
 
     /**
-     * Delete accents.
+     * Get a float.
      *
-     * @return \Lyssal\Text\SimpleString String without accent
+     * @param float $float The float to manage
+     *
+     * @return float The float
      */
-    public static function parse($number)
+    public static function parse($number): float
     {
-        return (float) str_replace($number, ',', '.');
+        return (float) str_replace(',', '.', $number);
     }
 }
