@@ -7,6 +7,9 @@
  */
 namespace Lyssal\Text;
 
+use DOMDocument;
+use DOMXPath;
+
 /**
  * Class to manipulate HTML.
  */
@@ -113,5 +116,27 @@ class Html extends AbstractText
     {
         $email = $matches[2].'@'.$matches[3];
         return $matches[1].'<a href="mailto:'.$email.'">'.$email.'</a>';
+    }
+
+    public function addTargetBlankToLinks(): self
+    {
+        $document = new DOMDocument();
+        $document->loadHTML($this->text);
+
+        $xPath = new DOMXPath($document);
+        $links = $xPath->query('//a[starts-with(@href, "http://")]');
+
+        /**
+         * @var \DOMNode $link
+         */
+        foreach ($links as $link) {
+            if (!$link->hasAttribute('target') && $link->hasAttribute('href')) {
+                $link->setAttribute('target', '_blank');
+            }
+        }
+
+        $this->text = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array("\n".'<html>', '</html>'."\n", '<body>', '</body>'), array('', '', '', ''), $document->saveHTML()));
+
+        return $this;
     }
 }

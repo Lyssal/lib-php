@@ -82,4 +82,18 @@ class HtmlTest extends TestCase
         $html->makeClickableEmails();
         $this->assertEquals($html->getText(), '<div> <a href="mailto:toto@exemple.fr">toto@exemple.fr</a> </div>');
     }
+
+    /**
+     * Test makeClickableEmails().
+     */
+    public function testAddTargetBlankToLinks()
+    {
+        $html = new Html('<a>Test</a>');
+        $html->addTargetBlankToLinks();
+        $this->assertEquals($html->getText(), '<a>Test</a>');
+
+        $html = new Html('<a href="http://www.lyssal.com/">Test</a>');
+        $html->addTargetBlankToLinks();
+        $this->assertEquals($html->getText(), '<a href="http://www.lyssal.com/" target="_blank">Test</a>');
+    }
 }
