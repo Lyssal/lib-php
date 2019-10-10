@@ -88,12 +88,12 @@ class HtmlTest extends TestCase
      */
     public function testAddTargetBlankToLinks()
     {
-        $html = new Html('<a>Test</a>');
+        $html = new Html('<a>Testé</a>');
         $html->addTargetBlankToLinks();
-        $this->assertEquals($html->getText(), '<a>Test</a>');
+        $this->assertEquals($html->getText(), '<a>Test&eacute;</a>');
 
-        $html = new Html('<a href="http://www.lyssal.com/">Test</a>');
+        $html = new Html('<a href="http://www.lyssal.com/">Testé</a>');
         $html->addTargetBlankToLinks();
-        $this->assertEquals($html->getText(), '<a href="http://www.lyssal.com/" target="_blank">Test</a>');
+        $this->assertEquals($html->getText(), '<a href="http://www.lyssal.com/" target="_blank">Test&eacute;</a>');
     }
 }

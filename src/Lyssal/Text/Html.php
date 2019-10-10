@@ -118,10 +118,15 @@ class Html extends AbstractText
         return $matches[1].'<a href="mailto:'.$email.'">'.$email.'</a>';
     }
 
+    /**
+     * Add target="_blank" in all links.
+     *
+     * @return \Lyssal\Text\Html This
+     */
     public function addTargetBlankToLinks(): self
     {
         $document = new DOMDocument();
-        $document->loadHTML($this->text);
+        $document->loadHTML(mb_convert_encoding($this->text, 'HTML-ENTITIES'));
 
         $xPath = new DOMXPath($document);
         $links = $xPath->query('//a[starts-with(@href, "http://")]');
