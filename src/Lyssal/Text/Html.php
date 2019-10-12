@@ -125,23 +125,18 @@ class Html extends AbstractText
      */
     public function addTargetBlankToLinks(): self
     {
-        $document = new DOMDocument();
-        $document->loadHTML(mb_convert_encoding($this->text, 'HTML-ENTITIES'));
-
-        $xPath = new DOMXPath($document);
-        $links = $xPath->query('//a[starts-with(@href, "http://")]');
-
-        /**
-         * @var \DOMNode $link
-         */
-        foreach ($links as $link) {
-            if (!$link->hasAttribute('target') && $link->hasAttribute('href')) {
-                $link->setAttribute('target', '_blank');
-            }
-        }
-
-        $this->text = preg_replace('/^<!DOCTYPE.+?>/', '', str_replace( array("\n".'<html>', '</html>'."\n", '<body>', '</body>'), array('', '', '', ''), $document->saveHTML()));
-
+        $this->text = preg_replace_callback(
+            '/(<a\\b[^<>]*href=[\'"]?[^<>]+)>/is',
+            function ($matches) {
+                if (1 !== preg_match('/(<a\\b[^<>]*target=[\'"]?[^<>]+)>/is', $matches[0])) {
+                    return $matches[1].' target="_blank">';
+                }
+            
+                return $matches[0];
+            },
+            $this->text
+        );
+        
         return $this;
     }
 }

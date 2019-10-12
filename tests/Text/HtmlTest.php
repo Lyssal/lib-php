@@ -90,10 +90,22 @@ class HtmlTest extends TestCase
     {
         $html = new Html('<a>Testé</a>');
         $html->addTargetBlankToLinks();
-        $this->assertEquals($html->getText(), '<a>Test&eacute;</a>');
+        $this->assertEquals($html->getText(), '<a>Testé</a>');
 
-        $html = new Html('<a href="http://www.lyssal.com/">Testé</a>');
+        $html = new Html('Ceci est un <a href="http://www.lyssal.com/">test <em>123</em></a> !');
         $html->addTargetBlankToLinks();
-        $this->assertEquals($html->getText(), '<a href="http://www.lyssal.com/" target="_blank">Test&eacute;</a>');
+        $this->assertEquals($html->getText(), 'Ceci est un <a href="http://www.lyssal.com/" target="_blank">test <em>123</em></a> !');
+
+        $html = new Html('<a href="http://www.lyssal.com/" target="_blank">Testé</a>');
+        $html->addTargetBlankToLinks();
+        $this->assertEquals($html->getText(), '<a href="http://www.lyssal.com/" target="_blank">Testé</a>');
+
+        $html = new Html('<a target="_blank" href="http://www.lyssal.com/">Testé</a>');
+        $html->addTargetBlankToLinks();
+        $this->assertEquals($html->getText(), '<a target="_blank" href="http://www.lyssal.com/">Testé</a>');
+
+        $html = new Html('<a href="/Test">Testé</a>');
+        $html->addTargetBlankToLinks();
+        $this->assertEquals($html->getText(), '<a href="/Test" target="_blank">Testé</a>');
     }
 }
