@@ -117,6 +117,9 @@ class Image extends File
             case IMAGETYPE_PNG:
                 $this->gdResource = imagecreatefrompng($this->getPathname());
                 break;
+            case IMAGETYPE_WEBP:
+                $this->gdResource = imagecreatefromwebp($this->getPathname());
+                break;
             case IMAGETYPE_GIF:
                 $this->gdResource = imagecreatefromgif($this->getPathname());
                 break;
@@ -163,7 +166,7 @@ class Image extends File
 
         if ($this->getWidth() !== $resizedRectangle->getWidth() || $this->getHeight() !== $resizedRectangle->getHeight()) {
             $resizedGdResource = imagecreatetruecolor($resizedRectangle->getWidth(), $resizedRectangle->getHeight());
-            if (in_array($this->type, array(IMAGETYPE_PNG, IMAGETYPE_GIF), false)) {
+            if (in_array($this->type, array(IMAGETYPE_PNG, IMAGETYPE_WEBP, IMAGETYPE_GIF), false)) {
                 imagealphablending($resizedGdResource, false);
                 imagesavealpha($resizedGdResource, true);
             }
@@ -212,6 +215,9 @@ class Image extends File
                 break;
             case IMAGETYPE_PNG:
                 imagepng($gdResource, $this->getPathname());
+                break;
+            case IMAGETYPE_WEBP:
+                imagewebp($gdResource, $this->getPathname());
                 break;
             case IMAGETYPE_GIF:
                 imagegif($gdResource, $this->getPathname());
