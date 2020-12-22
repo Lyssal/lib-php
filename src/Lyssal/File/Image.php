@@ -43,6 +43,7 @@ class Image extends File
         parent::__construct($imagePathname);
 
         $this->initProperties();
+
         if ($this->formatIsManaged()) {
             $this->initGdResource();
         }
@@ -166,10 +167,12 @@ class Image extends File
 
         if ($this->getWidth() !== $resizedRectangle->getWidth() || $this->getHeight() !== $resizedRectangle->getHeight()) {
             $resizedGdResource = imagecreatetruecolor($resizedRectangle->getWidth(), $resizedRectangle->getHeight());
+
             if (in_array($this->type, array(IMAGETYPE_PNG, IMAGETYPE_WEBP, IMAGETYPE_GIF), false)) {
                 imagealphablending($resizedGdResource, false);
                 imagesavealpha($resizedGdResource, true);
             }
+
             imagecopyresampled($resizedGdResource, $this->gdResource, $resizedRectangle->getX(), $resizedRectangle->getY(), $originalRectangle->getX(), $originalRectangle->getY(), $resizedRectangle->getWidth(), $resizedRectangle->getHeight(), $originalRectangle->getWidth(), $originalRectangle->getHeight());
             $this->saveFromGdResource($resizedGdResource);
             $this->dimension = $resizedRectangle->getDimension();
@@ -227,5 +230,21 @@ class Image extends File
         }
 
         $this->gdResource = $gdResource;
+    }
+
+    /**
+     * Convert the image to another format.
+     *
+     * @param int $type The image type (cf. IMAGETYPE_XXX)
+     */
+    public function convert(int $type): void
+    {
+        if ($this->type === $type) {
+            return;
+        }
+
+        $this->type = $type;
+        $this->saveFromGdResource($this->gdResource);
+        $this->setExtension(image_type_to_extension($type, false));
     }
 }

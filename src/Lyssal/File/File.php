@@ -61,12 +61,12 @@ class File
      *
      * @param string $pathname Pathname
      */
-    protected function initSplFileInfo($pathname)
+    protected function initSplFileInfo()
     {
         $this->splFileInfo = null;
 
         if (!$this->isUrl() && $this->exists()) {
-            $this->splFileInfo = new \SplFileInfo($pathname);
+            $this->splFileInfo = new \SplFileInfo($this->pathname);
         }
     }
 
@@ -89,7 +89,7 @@ class File
     public function setPathname($pathname)
     {
         $this->pathname = $pathname;
-        $this->initSplFileInfo($pathname);
+        $this->initSplFileInfo();
     }
 
     /**
@@ -117,11 +117,7 @@ class File
             return $this->splFileInfo->getPath();
         }
 
-        return (
-            $this->isUrl()
-                ? substr($this->pathname, 0, strrpos($this->pathname, '/'))
-                : substr($this->pathname, 0, strrpos($this->pathname, DIRECTORY_SEPARATOR))
-        );
+        return substr($this->pathname, 0, strrpos($this->pathname, $this->getPathDirectorySeparator()));
     }
 
     /**
@@ -135,11 +131,17 @@ class File
             return $this->splFileInfo->getFilename();
         }
 
-        return (
-            $this->isUrl()
-                ? substr($this->pathname, strrpos($this->pathname, '/') + 1)
-                : substr($this->pathname, strrpos($this->pathname, DIRECTORY_SEPARATOR) + 1)
-        );
+        return substr($this->pathname, strrpos($this->pathname, $this->getPathDirectorySeparator()) + 1);
+    }
+
+    /**
+     * Get the path directory separator.
+     *
+     * @return string The path directory separator
+     */
+    protected function getPathDirectorySeparator(): string
+    {
+        return $this->isUrl() ? '/' : DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -150,6 +152,27 @@ class File
     public function hasExtension()
     {
         return (null !== $this->getExtension());
+    }
+
+    /**
+     * Change the file extension.
+     *
+     * @param string|null $extension The extension
+     * @param bool        $replace   If the file has to be replaced if already existing or renamed
+     *
+     * @return $this Self
+     */
+    public function setExtension(?string $extension, bool $replace = false): self
+    {
+        $pathname = $this->getPath().$this->getPathDirectorySeparator().$this->getFilenameWithoutExtension();
+
+        if (null !== $extension) {
+            $pathname .= '.'.$extension;
+        }
+
+        $this->move($pathname, $replace);
+
+        return $this;
     }
 
     /**
