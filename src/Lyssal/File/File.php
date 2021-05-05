@@ -268,7 +268,7 @@ class File
      */
     public function isUrl()
     {
-        return (false !== filter_var($this->pathname, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED));
+        return (false !== filter_var($this->pathname, FILTER_VALIDATE_URL));
     }
 
     /**
