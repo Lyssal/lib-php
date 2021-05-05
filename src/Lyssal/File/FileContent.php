@@ -58,7 +58,7 @@ class FileContent
         } elseif (is_string($fileOrPathname)) {
             $this->file = new File($fileOrPathname);
         } else {
-            throw new InvalidArgumentException('The argument of the construcot\'s class FileInfo have to be a string or a '.File::class.' object.');
+            throw new InvalidArgumentException('The argument of the constructor\'s class FileInfo have to be a string or a '.File::class.' object.');
         }
     }
 
