@@ -220,6 +220,7 @@ class Image extends File
                 imagepng($gdResource, $this->getPathname());
                 break;
             case IMAGETYPE_WEBP:
+                imagepalettetotruecolor($gdResource);
                 imagewebp($gdResource, $this->getPathname());
                 break;
             case IMAGETYPE_GIF:
