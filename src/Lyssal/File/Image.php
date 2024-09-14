@@ -25,13 +25,12 @@ class Image extends File
     /**
      * @var \Lyssal\Math\Geometry\Geometry2d\Dimension The image dimension
      */
-    protected $dimension;
+    protected Dimension $dimension;
 
     /**
      * @var int Image type (cf. IMAGETYPE_XXX)
      */
-    protected $type;
-
+    protected ?int $type = null;
 
     /**
      * Constructor.
@@ -48,7 +47,6 @@ class Image extends File
             $this->initGdResource();
         }
     }
-
 
     /**
      * Get dimension.
@@ -80,7 +78,6 @@ class Image extends File
         return $this->dimension->getHeight();
     }
 
-
     /**
      * Init the Image properties.
      */
@@ -109,26 +106,31 @@ class Image extends File
      *
      * @throws \Lyssal\Exception\IoException If format is incorrect
      */
-    protected function initGdResource()
+    protected function initGdResource(): void
     {
+        if (self::avifIsSupported() && IMAGETYPE_AVIF === $this->type) {
+            $this->gdResource = \imagecreatefromavif($this->getPathname());
+
+            return;
+        }
+
         switch ($this->type) {
-            case IMAGETYPE_JPEG:
-                $this->gdResource = imagecreatefromjpeg($this->getPathname());
+            case \IMAGETYPE_JPEG:
+                $this->gdResource = \imagecreatefromjpeg($this->getPathname());
                 break;
-            case IMAGETYPE_PNG:
-                $this->gdResource = imagecreatefrompng($this->getPathname());
+            case \IMAGETYPE_PNG:
+                $this->gdResource = \imagecreatefrompng($this->getPathname());
                 break;
-            case IMAGETYPE_WEBP:
-                $this->gdResource = imagecreatefromwebp($this->getPathname());
+            case \IMAGETYPE_WEBP:
+                $this->gdResource = \imagecreatefromwebp($this->getPathname());
                 break;
-            case IMAGETYPE_GIF:
-                $this->gdResource = imagecreatefromgif($this->getPathname());
+            case \IMAGETYPE_GIF:
+                $this->gdResource = \imagecreatefromgif($this->getPathname());
                 break;
             default:
                 throw new IoException('The image format is not managed.');
         }
     }
-
 
     /**
      * Resize the image.
@@ -210,20 +212,26 @@ class Image extends File
      * @param resource $gdResource The GD resource
      * @throws \Exception Si le format n'est reconnu
      */
-    protected function saveFromGdResource($gdResource)
+    protected function saveFromGdResource($gdResource): void
     {
+        if (self::avifIsSupported() && IMAGETYPE_AVIF === $this->type) {
+            imageavif($gdResource, $this->getPathname());
+
+            return;
+        }
+
         switch ($this->type) {
-            case IMAGETYPE_JPEG:
+            case \IMAGETYPE_JPEG:
                 imagejpeg($gdResource, $this->getPathname());
                 break;
-            case IMAGETYPE_PNG:
+            case \IMAGETYPE_PNG:
                 imagepng($gdResource, $this->getPathname());
                 break;
-            case IMAGETYPE_WEBP:
+            case \IMAGETYPE_WEBP:
                 imagepalettetotruecolor($gdResource);
                 imagewebp($gdResource, $this->getPathname());
                 break;
-            case IMAGETYPE_GIF:
+            case \IMAGETYPE_GIF:
                 imagegif($gdResource, $this->getPathname());
                 break;
             default:
@@ -247,5 +255,10 @@ class Image extends File
         $this->type = $type;
         $this->saveFromGdResource($this->gdResource);
         $this->setExtension(image_type_to_extension($type, false));
+    }
+
+    public static function avifIsSupported(): bool
+    {
+        return \function_exists('imageavif');
     }
 }
