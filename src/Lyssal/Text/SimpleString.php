@@ -109,7 +109,9 @@ class SimpleString extends AbstractText
 
         // Delete separators in double and in beggining and end
         if ('' !== $separator) {
-            $this->text = preg_replace('/(\\'.$separator.')+/', $separator, trim($this->text, $separator));
+            $separatorEscape = \in_array($separator, ['(', ')', '^', '$', '[', '\\', '|', '.', '*', '+', '?'], true) ? '\\' : '';
+
+            $this->text = preg_replace('/('.$separatorEscape.$separator.')+/', $separator, trim($this->text, $separator));
         }
 
         return $this;
