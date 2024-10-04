@@ -108,7 +108,7 @@ class Image extends File
      */
     protected function initGdResource(): void
     {
-        if (self::avifIsSupported() && IMAGETYPE_AVIF === $this->type) {
+        if (self::avifIsSupported() && \IMAGETYPE_AVIF === $this->type) {
             $this->gdResource = \imagecreatefromavif($this->getPathname());
 
             return;
@@ -170,7 +170,7 @@ class Image extends File
         if ($this->getWidth() !== $resizedRectangle->getWidth() || $this->getHeight() !== $resizedRectangle->getHeight()) {
             $resizedGdResource = imagecreatetruecolor($resizedRectangle->getWidth(), $resizedRectangle->getHeight());
 
-            if (in_array($this->type, array(IMAGETYPE_PNG, IMAGETYPE_WEBP, IMAGETYPE_GIF), false)) {
+            if (in_array($this->type, [\IMAGETYPE_PNG, \IMAGETYPE_WEBP, \IMAGETYPE_AVIF, \IMAGETYPE_GIF], false)) {
                 imagealphablending($resizedGdResource, false);
                 imagesavealpha($resizedGdResource, true);
             }
@@ -214,7 +214,8 @@ class Image extends File
      */
     protected function saveFromGdResource($gdResource): void
     {
-        if (self::avifIsSupported() && IMAGETYPE_AVIF === $this->type) {
+        if (self::avifIsSupported() && \IMAGETYPE_AVIF === $this->type) {
+            imagepalettetotruecolor($gdResource);
             imageavif($gdResource, $this->getPathname());
 
             return;
