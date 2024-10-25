@@ -127,6 +127,9 @@ class Image extends File
             case \IMAGETYPE_GIF:
                 $this->gdResource = \imagecreatefromgif($this->getPathname());
                 break;
+            case \IMAGETYPE_BMP:
+                $this->gdResource = \imagecreatefrombmp($this->getPathname());
+                break;
             default:
                 throw new IoException('The image format is not managed.');
         }
@@ -234,6 +237,9 @@ class Image extends File
                 break;
             case \IMAGETYPE_GIF:
                 imagegif($gdResource, $this->getPathname());
+                break;
+            case \IMAGETYPE_BMP:
+                imagebmp($gdResource, $this->getPathname());
                 break;
             default:
                 throw new IoException('The image format is not managed.');
